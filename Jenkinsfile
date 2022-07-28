@@ -4,7 +4,13 @@ pipeline {
   stages {
     stage('Build'){
             steps{
-                sh 'maven clean package'
+              
+                sh '''
+                export MAVEN_HOME=/opt/maven
+                export PATH=$PATH:$MAVEN_HOME/bin
+                mvn --version
+                mvn clean package
+                '''
             }
          }
     stage('Scan') {
