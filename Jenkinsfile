@@ -17,7 +17,10 @@ pipeline {
                 export SONAR_HOME=/var/jenkins_home/tools/hudson.plugins.sonar.SonarRunnerInstallation/sonar-scanner/
                 export PATH=$PATH:$SONAR_HOME/bin
             
-                mvn sonar:sonar
+               mvn sonar:sonar \
+                  -Dsonar.projectKey=teste \
+                  -Dsonar.host.url=http://192.168.100.115/:9000 \
+                  -Dsonar.login=75ccf04de4df3fbb7a9741324cf8936cf6ec91e9
                 
                  '''
                 //   -Dsonar.projectKey=maven-token \
