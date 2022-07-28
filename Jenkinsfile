@@ -4,9 +4,6 @@ pipeline {
   agent any  
   stages {
           stage('SAST') {
-              environment {
-                  SCANNER_HOME = tool 'sonar-scanner'
-              }
               steps {
                   withSonarQubeEnv('sonarqube-server') {
                       sh" 	sonar-scanner \
