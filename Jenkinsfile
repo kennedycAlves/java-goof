@@ -2,22 +2,18 @@
 
 pipeline {
   agent any  
-  options {
-    buildDiscarder(logRotator(numToKeepStr: '5'))
-  }
   stages {
-    stage('Scan') {
-      steps {
-        withSonarQubeEnv(installationName: 'sonar') { 
-          sh '''
-            	sonar-scanner \
-                -Dsonar.projectKey=jenkins \
-                -Dsonar.sources=. \
-                -Dsonar.host.url=http://127.0.0.1:9000 \
-                -Dsonar.login=7fbc16826bceb1201dbb0bf135c50ac3aa47cd9f
-          '''
-        }
+          stage('SAST') {
+              environment {
+                  SCANNER_HOME = tool 'sonar-scanner'
+              }
+              steps {
+                  withSonarQubeEnv('sonarqube-server') {
+                      sh" ${SCANNER_HOME}}/bin/sonar-scanner \
+                      -Dsonar.projectKey=simple_webapp \
+                      -Dsonar.sources=. "
+                  }
+              }
+          }
       }
-    }
-  }
 }
