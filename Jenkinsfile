@@ -5,11 +5,10 @@ pipeline {
     stage('Build'){
             steps{
               
-                sh '''
-                env.MAVEN_HOME = \"${tool 'maven-3.8.6'}\"
+                sh "env.MAVEN_HOME = '${tool 'maven-3.8.6'}'"
                 
-                mvn clean package
-                '''
+                sh 'mvn clean package'
+               
             }
          }
     stage('Scan') {
