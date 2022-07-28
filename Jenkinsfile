@@ -1,6 +1,6 @@
 pipeline {
-    agent {
-        label linux-small
+  agent any  
+
   stages {
     stage('Build'){
             steps{
