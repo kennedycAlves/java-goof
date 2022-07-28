@@ -3,9 +3,8 @@ pipeline {
   stages {
     stage('Scan') {
       steps {
-        scannerHome = tool 'sonar-scanner';
          withSonarQubeEnv('sonarqube-server') { 
-          sh "${scannerHome}/bin/sonar-scanner"
+          sh 'mvn clean package sonar:sonar'
         }
       }
     }
