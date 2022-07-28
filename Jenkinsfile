@@ -3,16 +3,11 @@
 pipeline {
   agent any  
   stages {
-          stage('SAST') {
-              steps {
-                  withSonarQubeEnv('sonarqube-server') {
-                      sh" 	sonar-scanner \
-                            -Dsonar.projectKey=jenkins \
-                            -Dsonar.sources=. \
-                            -Dsonar.host.url=http://127.0.0.1:9000 \
-                            -Dsonar.login=7fbc16826bceb1201dbb0bf135c50ac3aa47cd9f"
-                  }
-              }
-          }
-      }
+           stage('SonarQube analysis') {
+    def scannerHome = tool 'sonar-scanner';
+    withSonarQubeEnv('sonarqube-server') { // If you have configured more than one global server connection, you can specify its name
+      sh "${scannerHome}/bin/sonar-scanner"
+    }
+  }
+}
 }
