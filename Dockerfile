@@ -14,6 +14,6 @@ RUN apt-get update && apt-get install wget -y
 # Add Datadog Java Agent required for profiling
 RUN wget -O dd-java-agent.jar 'https://repository.sonatype.org/service/local/artifact/maven/redirect?r=central-proxy&g=com.datadoghq&a=dd-java-agent&v=LATEST'
 
-EXPOSE 8080
+EXPOSE 8181
 
 CMD /usr/src/goof/start-script.sh
