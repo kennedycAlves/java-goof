@@ -39,9 +39,19 @@ pipeline {
                       -Dsonar.host.url=http://192.168.100.115:9000 \
                       -Dsonar.login=e1e3b33ff25592a3f02aaa4522c31b5881bb671c
               '''
-
+        
         }
       }
+    }
+   stage('Dependency Check Report') {
+    steps {
+        dependencyCheck additionalArguments: ''' 
+            -o "./" 
+            -s "./"
+            -f "ALL" 
+            --prettyPrint''', odcInstallation: 'Dependency-Check'
+        dependencyCheckPublisher pattern: 'dependency-check-report.xml'
+          }    
     }
   }
 }
