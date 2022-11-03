@@ -15,7 +15,11 @@
     </modules>
     <packaging>pom</packaging>
 
-
+<properties>
+  <sonar.organization>kennedycalves</sonar.organization>
+  <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+</properties>
+         
     <licenses>
         <license>
             <name>MIT License</name>
