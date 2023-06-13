@@ -26,4 +26,18 @@
             <url>https://opensource.org/licenses/mit-license.php</url>
         </license>
     </licenses>
+ <plugins>
+  <plugin>
+    <groupId>org.cyclonedx</groupId>
+    <artifactId>cyclonedx-maven-plugin</artifactId>
+    <version>INSERT_VERSION_HERE</version>
+    <executions>
+        <execution>
+            <goals>
+                <goal>makeAggregateBom</goal>
+            </goals>
+        </execution>
+    </executions>
+  </plugin>
+<plugins>
 </project>
