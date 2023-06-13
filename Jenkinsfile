@@ -1,5 +1,5 @@
 // define uma lista de projetos que passarão pela pipeline
-projects = "Java-goof"
+projects = ["java-goof"]
 //https://github.com/vitoraalmeida/forum
 //https://github.com/vitoraalmeida/leilao
 node {
@@ -7,37 +7,37 @@ node {
     cleanWs()
     stage ('clone repos') {
         // executa um loop para clonar cada repositório da lista num diretório próprio
-        // for(project in projects) {
-            // dir("${project}") {
-                // echo "dentro de ${project}"
-                git branch: 'main', url: "https://github.com/kennedycAlves/java-goof"
-        //     }
-        // }
+        for(project in projects) {
+            dir("${project}") {
+                echo "dentro de ${project}"
+                git branch: 'main', url: "https://github.com/kennedycAlves/${project}"
+            }
+        }
         sh 'ls'
     }
     // para cada projeto, navega até o diretório clonado e, se for um projeto com Maven (pom.xml)
     // executa o comando do maven que executa o plugin Cyclonedx. Se for gradle, o comando equivalente.
     stage ('execute cyclonedxBom') {
-        // for(project in projects) {
-            // dir("${project}") {
+        for(project in projects) {
+            dir("${project}") {
                 if (fileExists('pom.xml')) {
                     withMaven(maven: 'maven') {
-                        echo "Executing cyclonedxBom"
+                        echo "Executing cyclonedxBom in ${project}"
                         sh 'mvn org.cyclonedx:cyclonedx-maven-plugin:makeAggregateBom'
                     }
                 } else {
-                    echo "Executing cyclonedxBom"
+                    echo "Executing cyclonedxBom in ${project}"
                     sh './gradlew cyclonedxBom -info'
                 }
-        //     }
-        // }
+            }
+        }
     }
 
     // Utilizando a API key do dependency track, para cada relatório gerado em cada projeto, envia o relatório para o 
     // dependency track criando um novo projeto para o repositório em questão se ele já não existir
     stage('dependencyTrackPublisher') {
-        // for(project in projects) {
-            // dir("${project}") {
+        for(project in projects) {
+            dir("${project}") {
                 if (fileExists('./target')) {
                     withCredentials([string(credentialsId: 'dependency-track', variable: 'API_KEY')]) {
                         dependencyTrackPublisher artifact: 'target/bom.xml', projectName: "${project}", projectVersion: '1', synchronous: true, dependencyTrackApiKey: API_KEY
@@ -47,10 +47,9 @@ node {
                         dependencyTrackPublisher artifact: 'build/reports/bom.xml', projectName: "${project}", projectVersion: '1', synchronous: true, dependencyTrackApiKey: API_KEY
                     }
                 }
-        //     }
-        // }
+            }
+        }
     }
-
 
 // pipeline {
 //   agent any  
@@ -132,5 +131,5 @@ node {
   //           sh "python3 upload-files.py --result_file /var/lib/jenkins/workspace/Pipeline-Sec/sonar.html  --scanner 'SonarQube Scan' --host 127.0.0.1:8080 --api_key d64dca4d31e577b7924ac6e0b8cc59f4b1526430  --name Namerepository"
   //      }         
   //   }
-  }
-}
+//   }
+// }
