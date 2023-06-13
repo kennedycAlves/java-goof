@@ -1,8 +1,17 @@
 // define uma lista de projetos que passarão pela pipeline
 projects = ["java-goof"]
+  
+
 //https://github.com/vitoraalmeida/forum
 //https://github.com/vitoraalmeida/leilao
 node {
+
+    environment {
+         MAVEN_HOME = tool name: 'maven'                   
+         SONAR_HOME =  tool name: 'sonar-scanner'
+    }
+
+    
     // limpa o workspace para remover arquivos antigos de builds anteriores
     cleanWs()
     stage ('clone repos') {
@@ -17,22 +26,21 @@ node {
     }
     // para cada projeto, navega até o diretório clonado e, se for um projeto com Maven (pom.xml)
     // executa o comando do maven que executa o plugin Cyclonedx. Se for gradle, o comando equivalente.
-    stage ('execute cyclonedxBom') {
-        for(project in projects) {
-            dir("${project}") {
-                if (fileExists('pom.xml')) {
-                    withMaven(maven: 'maven') {
-                        echo "Executing cyclonedxBom in ${project}"
-                        sh 'mvn org.cyclonedx:cyclonedx-maven-plugin:makeAggregateBom'
-                    }
-                } else {
-                    echo "Executing cyclonedxBom in ${project}"
-                    sh './gradlew cyclonedxBom -info'
-                }
+    stage('Build'){
+            steps{
+           
+                sh 'echo export MAVEN_HOME= "{env.$MAVEN_HOME}"'
+               
+                sh'''
+                
+                export PATH=$PATH:$MAVEN_HOME/bin
+                mvn org.cyclonedx:cyclonedx-maven-plugin:makeAggregateBom
+                
+                
+                 '''
+
             }
-        }
-    }
-}
+         }
     // Utilizando a API key do dependency track, para cada relatório gerado em cada projeto, envia o relatório para o 
     // dependency track criando um novo projeto para o repositório em questão se ele já não existir
     stage('dependencyTrackPublisher') {
