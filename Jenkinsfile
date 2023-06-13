@@ -32,7 +32,7 @@ node {
             }
         }
     }
-
+}
     // Utilizando a API key do dependency track, para cada relatório gerado em cada projeto, envia o relatório para o 
     // dependency track criando um novo projeto para o repositório em questão se ele já não existir
     stage('dependencyTrackPublisher') {
